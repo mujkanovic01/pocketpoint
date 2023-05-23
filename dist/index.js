@@ -16,7 +16,7 @@ app.get('/', function (req, res) {
 });
 app.use(middleware_1.errorMiddleware);
 app.use('/user', routes_1.UserRouter);
-app.listen(80, function () {
-    console.log('Server is running on port 80');
+app.listen(3000, function () {
+    console.log('Server is running on port 3000');
 });
 //# sourceMappingURL=index.js.map
