@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A nodejs template using typescript",
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "tsc && node dist/index.js",
     "build": "tsc"
   },
   "dependencies": {
