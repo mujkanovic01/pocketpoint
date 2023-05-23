@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "preserveConstEnums": true,
+    "strictNullChecks": true,
+    "sourceMap": true,
+    "allowJs": true,
+    "target": "es5",
+    "moduleResolution": "node",
+    "lib": [
+      "es2015"
+    ],
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/types/"
+    ],
+    "outDir": "./dist",
+  },
+    "include": [
+        "./src/**/*"
+    ],
+}
