@@ -1,1 +1,1 @@
-export * from './getById';
+export * from './userService';
