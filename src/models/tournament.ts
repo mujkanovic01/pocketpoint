@@ -4,7 +4,7 @@ export type Tournament = {
   id: number;
   title: string,
   club_name: string,
-  num_of_players: string,
+  num_of_players: number,
   discipline: string,
   datetime: Date,
   created_at: Date;

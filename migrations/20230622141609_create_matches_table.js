@@ -5,6 +5,7 @@
 exports.up = function(knex) {
     return knex.schema.createTable('matches', function(t) {
         t.increments('id').unsigned().primary();
+        t.integer('number').unsigned();
         t.timestamp("created_at").defaultTo(knex.fn.now());
         t.timestamp("updated_at").defaultTo(knex.fn.now());
         t.string('status');
@@ -12,6 +13,8 @@ exports.up = function(knex) {
         t.integer('player_one_score');
         t.integer('player_two_score');
         t.integer('round_id').unsigned();
+        t.integer('slot_one_reference_match').unsigned();
+        t.integer('slot_two_reference_match').unsigned();
         t.foreign('round_id').references('rounds.id')
         t.integer('player_one_id').unsigned();
         t.foreign('player_one_id').references('users.id')

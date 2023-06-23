@@ -1,21 +1,21 @@
 import { BaseResponse } from '../types';
 import { Request, RequestHandler } from 'express';
 import { isNumeric, messageError, successResponse } from '../../helpers';
-import { UserService } from '../../services';
+import {TournamentService, UserService} from '../../services';
 import _ from 'lodash';
 import { User } from '../../models';
 
 type Params = unknown;
-type ResBody = User;
+type ResBody = unknown;
 type ReqBody = unknown;
 type ReqQuery = { id: string };
-type GetByIdRequestHandler = RequestHandler<Params, BaseResponse<ResBody>, ReqBody, ReqQuery>;
+type GetTournamentDataByIdRequestHandler = RequestHandler<Params, BaseResponse<ResBody>, ReqBody, ReqQuery>;
 
 const transformRequest = (req: Request<Params, BaseResponse<ResBody>, ReqBody, ReqQuery>) => ({
   id: parseInt(req.query.id),
 });
 
-const validateRequest: GetByIdRequestHandler = (req, res, next) => {
+const validateRequest: GetTournamentDataByIdRequestHandler = (req, res, next) => {
   // Base validation
   if (!_.isEmpty(req.params)) return next(messageError('Query parameters not allowed'));
   if (!_.isEmpty(req.body)) return next(messageError('Body parameters not allowed'));
@@ -27,15 +27,15 @@ const validateRequest: GetByIdRequestHandler = (req, res, next) => {
   next();
 };
 
-const getById: GetByIdRequestHandler = async (req, res, next) => {
+const getTournamentDataById: GetTournamentDataByIdRequestHandler = async (req, res, next) => {
   const { id } = transformRequest(req);
 
-  const [user, err] = await UserService.getById(id);
-  if (err !== null || user === null) {
+  const [tournamentData, err] = await TournamentService.getTournamentDataById(id);
+  if (err !== null || tournamentData === null) {
     return next(err);
   }
 
-  res.status(200).json(successResponse(user));
+  res.status(200).json(successResponse(tournamentData));
 };
 
-export const GetByIdRoute = [validateRequest, getById];
+export const GetTournamentDataByIdRoute = [validateRequest, getTournamentDataById];
