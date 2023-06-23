@@ -1,4 +1,4 @@
-import { User, USER_COLUMNS, USER_TABLE } from '../../models';
+import {Tournament, User, USER_COLUMNS, USER_TABLE} from '../../models';
 import { dbError, handlePromise, messageError, ValueError } from '../../helpers';
 import db from '../../lib/db-client';
 // import bcrypt from 'bcrypt';
@@ -16,6 +16,16 @@ export const getById = async (id: number): Promise<ValueError<User>> => {
   return [user, null];
 };
 
+export const getAllUsers = async (): Promise<ValueError<User[]>> => {
+  const [users, err] = await handlePromise(db('users'));
+
+  if (err !== null) {
+    return [null, dbError(err)];
+  }
+
+  return [users, null];
+};
+
 export const getByEmail = async (email: string): Promise<ValueError<User>> => {
   const [user, err] = await handlePromise(db(USER_TABLE).where(USER_COLUMNS.email, email).first());
 
@@ -29,7 +39,6 @@ export const getByEmail = async (email: string): Promise<ValueError<User>> => {
   return [user, null];
 };
 
-
 export const getUsersByName = async (name: string): Promise<ValueError<User[]>> => {
   const [users, err] = await handlePromise(db(USER_TABLE).where(USER_COLUMNS.first_name, 'like', `%${name}%`).orWhere(USER_COLUMNS.last_name, 'like', `%${name}%`));
 
@@ -40,27 +49,8 @@ export const getUsersByName = async (name: string): Promise<ValueError<User[]>> 
     return [null, messageError("User doesn't exist")];
   }
 
-  console.log(users)
   return [users, null];
 };
-//
-// export const resetPassword = async (userId: number, password: string): Promise<ValueError<string>> => {
-//   const hashedPassword = await bcrypt.hash(password, 10);
-//
-//   const [num_updated, err] = await handlePromise(
-//     db(USER_TABLE).update(USER_COLUMNS.password, hashedPassword).where(USER_COLUMNS.id, userId),
-//   );
-//
-//   if (err !== null) {
-//     return [null, dbError(err)];
-//   }
-//
-//   if (num_updated === 0) {
-//     return [null, messageError("Couldn't update password for user")];
-//   }
-//
-//   return ['Password updated', null];
-// };
 
 export const deleteById = async (id: number): Promise<ValueError<string>> => {
   const [numOfDelUser, err] = await handlePromise(db(USER_TABLE).where(USER_COLUMNS.id, id).first().del());

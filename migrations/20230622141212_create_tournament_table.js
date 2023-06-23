@@ -9,9 +9,9 @@ exports.up = function(knex) {
         t.timestamp("updated_at").defaultTo(knex.fn.now());
         t.string('title');
         t.string('club_name');
-        t.string('num_of_players');
         t.string('discipline');
         t.string('status');
+        t.integer('num_of_players');
         t.datetime('datetime');
     });
 };

@@ -3,12 +3,6 @@ import { Request, RequestHandler } from 'express';
 import { messageError, successResponse } from '../../helpers';
 import { TournamentService } from '../../services';
 import _ from 'lodash';
-import { JsonDatabase } from 'brackets-json-db';
-import { BracketsManager } from 'brackets-manager';
-import {TournamentInsertData} from "../../models/tournament";
-
-// const { JsonDatabase } = require('brackets-json-db');
-// const { BracketsManager } = require('brackets-manager');
 
 type Params = unknown;
 type ResBody = unknown;
@@ -44,16 +38,21 @@ const validateRequest: CreateTournamentRequestHandler = (req, res, next) => {
 };
 
 const createTournament: CreateTournamentRequestHandler = async (req, res, next) => {
-  const tournamentData = transformRequest(req);
+  const {players, race_to, ...tournamentData} = transformRequest(req);
   const [tournamentId , err] = await TournamentService.createTournament(tournamentData);
 
   if(tournamentId === null || tournamentId === undefined) {
     return next(err);
   }
 
-  // const tournamentData = await TournamentService.getTournamentData(tournamentId);
+  // const playerArray = players.split(', ').map(p => +p);
+  const [tournamentIdBracket, err2] = await TournamentService.generateBracket({tournament_id: tournamentId, ...tournamentData, players, race_to});
 
-  res.status(200).json(successResponse({'tournament_id:': tournamentId}));
+  if(tournamentIdBracket === null || tournamentIdBracket === undefined || err2) {
+    return next(err2);
+  }
+
+  res.status(200).json(successResponse({'tournament_id': tournamentIdBracket}));
 };
 
 export const CreateTournamentRoute = [validateRequest, createTournament];

@@ -11,6 +11,7 @@ exports.up = function(knex) {
         t.string('password');
         t.string('first_name');
         t.string('last_name');
+        t.integer('win_percentage').defaultTo(0);
         t.date('date_of_birth');
         t.string('nationality');
     });
