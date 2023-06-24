@@ -14,5 +14,4 @@ const dbConfig: Knex.Config = {
 };
 
 const db = knex(dbConfig);
-
 export default db;
